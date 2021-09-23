@@ -43,24 +43,44 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title!),
-        centerTitle: true,
       ),
-      body: GridView.builder(
-          scrollDirection: Axis.horizontal,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3),
-          itemCount: userData.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: const Center(child: Icon(Icons.person)),
-              title: Center(
-                child: Text(
-                  userData[index]["gender"],
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-            );
-          }),
+      body: Container(
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: userData.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.all(8.0),
+                          child: Image.network(
+                            userData[index]["picture"]["large"],
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                userData[index]['name']['title'] +
+                                    " " +
+                                    userData[index]['name']['first'] +
+                                    " " +
+                                    userData[index]['name']['last'],
+                                style: const TextStyle(fontSize: 20),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+      ),
     );
   }
 }
